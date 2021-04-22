@@ -9,21 +9,26 @@ import javax.xml.bind.DatatypeConverter;
 public class Block {
     
     private int Index; //block number
-    private ArrayList<Transaction> Transcation; //transaction data
+    private  ArrayList<Transaction> Transcation; //transaction data
     private double time; //time block was created
     private String prevHash;//previous hash
     private String Hash;//hash
     
     
-    public Block(int Index, ArrayList<Transaction> Transcation, double time, String prevHash, String Hash) {
+    public Block(int Index, ArrayList<Transaction> Transcation, double time) {
         this.Index = Index;
         this.Transcation = Transcation;
         this.time = time;
         this.prevHash = prevHash;
         this.Hash = calculateHash(this);
     }
+
+    @Override
+    public String toString() {
+        return "Block{" + "Index=" + Index + ", Transcation=" + Transcation + ", time=" + time + ", prevHash=" + prevHash + ", Hash=" + Hash + '}';
+    }
     
-        public static String calculateHash(Block Block){
+    public static String calculateHash(Block Block){
         String hashTransactions = "";
         
         //loops through the transaction arraylist int the block

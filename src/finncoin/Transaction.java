@@ -28,6 +28,7 @@ public class Transaction {
         //returns encoded block
         return hashEncoded;
     }
+    
     public String getSender() {
         return sender;
     }

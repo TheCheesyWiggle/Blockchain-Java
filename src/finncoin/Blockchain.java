@@ -6,17 +6,18 @@ import java.util.ArrayList;
 
 public class Blockchain {
     
-    private ArrayList<Block> Chain;
+    private static ArrayList<Block> Chain;
+    
 
     public Blockchain(ArrayList<Block> Chain) {
         this.Chain = Chain;
     }
     
-    public Block getLastBlock(ArrayList<Block> Chain){
+    public static Block getLastBlock(ArrayList<Block> Chain){
         return Chain.get(Chain.size()-1);
     }
     
-    public void addBlock(Block Block){
+    public static void addBlock(Block Block){
         if(Chain.size()>0){
             Block.setPrevHash(getLastBlock(Chain).getHash());
         }
