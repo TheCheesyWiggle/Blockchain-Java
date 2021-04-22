@@ -15,9 +15,19 @@ public class Transaction {
         this.reciever = reciever;
         this.amount = amount;
         this.time = time;
-        this.Hash = Hash;
+        this.Hash = calculateHash(this);
     }
-
+    
+    
+    public static String calculateHash(Transaction Transaction){
+        //gets all the data in the object and converts it to a string
+        String hashString = Transaction.getSender()+ Transaction.getReciever()+ Double.toString(Transaction.getAmount())+ Double.toString(Transaction.getTime());
+        //encodes it
+        SHA256InJava hash = new SHA256InJava();
+        String hashEncoded = hash.getSHA256Hash(hashString);
+        //returns encoded block
+        return hashEncoded;
+    }
     public String getSender() {
         return sender;
     }
