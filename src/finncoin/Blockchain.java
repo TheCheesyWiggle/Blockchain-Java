@@ -95,18 +95,23 @@ public class Blockchain {
     // </editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Mine pending transactions">
+    
     public static void minePendingTransactions(Blockchain Blockchain,String miner){
+        //grabs the length of the arraylist PendingTransactions within the blockchain
         int lenPT = Blockchain.getPendingTransactions().size();
         
+        //if the length isnt larger than one it doesnt mine the block
         if(lenPT <= 1){
             System.out.println("not enough transactions");
         }
         else{
+            //loops in block sized increments
+            //if the transaction list is bigger than one block it doesnt crash
             for(int i = 0;i<lenPT;i = i+ Blockchain.getBlockSize()){
                 
                 int end = i+ Blockchain.getBlockSize();
                 
-                if(lenPT <= i){
+                if(i >= lenPT){
                     end = lenPT;
                 }
                 

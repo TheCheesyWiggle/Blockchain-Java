@@ -16,6 +16,8 @@ public class FinnCoin {
         
         Transaction test = new Transaction("","",100);
         pendingTransactions.add(test);
+        Transaction test1 = new Transaction("123","1234",100);
+        pendingTransactions.add(test1);
         
         Blockchain.setPendingTransactions(pendingTransactions);
         
