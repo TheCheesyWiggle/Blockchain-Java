@@ -3,6 +3,7 @@ package finncoin;
 
 import java.util.ArrayList;
 import java.security.MessageDigest;
+import java.util.Date;
 import javax.xml.bind.DatatypeConverter;
 
 
@@ -13,42 +14,20 @@ public class Block {
     private double time; //time block was created
     private String prevHash;//previous hash
     private String Hash;//hash
+    private int Nonce;//nonce
     
-    
-    public Block(int Index, ArrayList<Transaction> Transcation, double time) {
+    // <editor-fold defaultstate="collapsed" desc="Constructors"> 
+    public Block(int Index, ArrayList<Transaction> Transcation) {
         this.Index = Index;
         this.Transcation = Transcation;
-        this.time = time;
+        Date Time = new Date();
+        this.time = Time.getTime();
         this.prevHash = prevHash;
         this.Hash = calculateHash(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Block{" + "Index=" + Index + ", Transcation=" + Transcation + ", time=" + time + ", prevHash=" + prevHash + ", Hash=" + Hash + '}';
-    }
+        this.Nonce = 0;
+    }// </editor-fold>
     
-    public static String calculateHash(Block Block){
-        String hashTransactions = "";
-        
-        //loops through the transaction arraylist int the block
-        for(int i = 0; i<(Block.getTranscation()).size();i++){
-            
-            //gets the transaction its on in the list
-            Transaction Transaction = Block.getTranscation().get(i);
-            //gets the transaction hash
-            hashTransactions = hashTransactions + Transaction.getHash();
-        }
-        
-        //gets all the data in the object and converts it to a string
-        String hashString = Double.toString(Block.getTime())+hashTransactions+Block.getPrevHash()+Integer.toString(Block.getIndex());
-        //encodes it
-        SHA256InJava hash = new SHA256InJava();
-        String hashEncoded = hash.getSHA256Hash(hashString);
-        //returns encoded block
-        return hashEncoded;
-    }
-
+    // <editor-fold defaultstate="collapsed" desc="Getters & Setters">  
     public int getIndex() {
         return Index;
     }
@@ -88,7 +67,66 @@ public class Block {
     public void setHash(String Hash) {
         this.Hash = Hash;
     }
+
+    public int getNonce() {
+        return Nonce;
+    }
+
+    public void setNonce(int Nonce) {
+        this.Nonce = Nonce;
+    }
     
     
+    // </editor-fold> 
     
+    // <editor-fold defaultstate="collapsed" desc="Block attributes to string"> 
+    @Override
+    public String toString(){
+        return "Block"+Index + "{Transcation = " + Transcation + ", time = " + time + ", prevHash = " + prevHash + ", Hash = " + Hash + ", Nonce = " + Nonce + '}';
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Calculate block hash">
+    public static String calculateHash(Block Block) {
+        String hashTransactions = "";
+        
+        //loops through the transaction arraylist int the block
+        for(int i = 0; i<(Block.getTranscation()).size();i++){
+            
+            //gets the transaction its on in the list
+            Transaction Transaction = Block.getTranscation().get(i);
+            //gets the transaction hash
+            hashTransactions = hashTransactions + Transaction.getHash();
+        }
+        
+        //gets all the data in the object and converts it to a string
+        String hashString = Double.toString(Block.getTime())+hashTransactions+Block.getPrevHash()+Integer.toString(Block.getIndex());
+        //encodes it
+        SHA256InJava hash = new SHA256InJava();
+        String hashEncoded = hash.getSHA256Hash(hashString);
+        //returns encoded block
+        return hashEncoded;
+    }
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="Mine Block"> 
+    public static Boolean mineBlock(Block Block,int difficulty){
+        /*
+        ArrayList<Integer> Array = new ArrayList<Integer>();
+        
+        for(int i = 0;i<difficulty;i++){
+            Array.add(i);
+        }
+        */
+        
+        String hashPuzzle = "1234";
+        
+        while(Block.getHash().substring(0, 4) != hashPuzzle){
+            Block.setNonce(Block.getNonce()+1);
+            Block.setHash(Block.calculateHash(Block));
+        }
+        System.out.println("Block Mined");
+        return true;
+    }
+    // </editor-fold>
 }

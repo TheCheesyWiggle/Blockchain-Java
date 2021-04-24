@@ -1,6 +1,8 @@
 
 package finncoin;
 
+import java.util.Date;
+
 
 public class Transaction {
     
@@ -9,16 +11,18 @@ public class Transaction {
     private double amount;
     private double time;
     private String Hash;
-
-    public Transaction(String sender, String reciever, double amount, double time, String Hash) {
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors"> 
+    public Transaction(String sender, String reciever, double amount) {
         this.sender = sender;
         this.reciever = reciever;
         this.amount = amount;
-        this.time = time;
+        Date Time = new Date();
+        this.time = Time.getTime();
         this.Hash = calculateHash(this);
-    }
+    }// </editor-fold>
     
-    
+    // <editor-fold defaultstate="collapsed" desc="Calculate hash"> 
     public static String calculateHash(Transaction Transaction){
         //gets all the data in the object and converts it to a string
         String hashString = Transaction.getSender()+ Transaction.getReciever()+ Double.toString(Transaction.getAmount())+ Double.toString(Transaction.getTime());
@@ -27,8 +31,9 @@ public class Transaction {
         String hashEncoded = hash.getSHA256Hash(hashString);
         //returns encoded block
         return hashEncoded;
-    }
+    }// </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
     public String getSender() {
         return sender;
     }
@@ -68,6 +73,6 @@ public class Transaction {
     public void setHash(String Hash) {
         this.Hash = Hash;
     }
-    
+    // </editor-fold>
     
 }
