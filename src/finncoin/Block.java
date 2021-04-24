@@ -111,19 +111,21 @@ public class Block {
     
     // <editor-fold defaultstate="collapsed" desc="Mine Block"> 
     public static Boolean mineBlock(Block Block,int difficulty){
-        /*
+ 
         ArrayList<Integer> Array = new ArrayList<Integer>();
         
         for(int i = 0;i<difficulty;i++){
             Array.add(i);
         }
-        */
         
         String hashPuzzle = "1234";
         
         while(Block.getHash().substring(0, 4) != hashPuzzle){
             Block.setNonce(Block.getNonce()+1);
             Block.setHash(Block.calculateHash(Block));
+            System.out.println("Nonce: "+Block.getNonce());
+            System.out.println("Hash Attempt: "+Block.getHash());
+            System.out.println("Hash Wanted: "+hashPuzzle);
         }
         System.out.println("Block Mined");
         return true;

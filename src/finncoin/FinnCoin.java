@@ -15,6 +15,11 @@ public class FinnCoin {
         Blockchain.genesisBlock(Blockchain);
         
         Transaction test = new Transaction("","",100);
+        pendingTransactions.add(test);
+        
+        Blockchain.setPendingTransactions(pendingTransactions);
+        
+        Blockchain.minePendingTransactions(Blockchain,"Finn");
                 
         for(int i = 0; i<Blockchain.getBlockchain().size();i++){
             System.out.println(Blockchain.getBlockchain().get(i).toString());

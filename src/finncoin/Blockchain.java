@@ -20,8 +20,8 @@ public class Blockchain {
         this.minerReward = 50;
         this.blockSize = 10;
     }// </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
+
+    // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public ArrayList<Block> getBlockchain() {
         return Blockchain;
     }
@@ -37,10 +37,35 @@ public class Blockchain {
     public void setPendingTransactions(ArrayList<Transaction> pendingTransactions) {
         this.pendingTransactions = pendingTransactions;
     }
-// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Get Last Block"> 
-    public static Block getLastBlock(ArrayList<Block> Chain){
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getMinerReward() {
+        return minerReward;
+    }
+
+    public void setMinerReward(int minerReward) {
+        this.minerReward = minerReward;
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+    
+    public void setBlockSize(int blockSize) {    
+        this.blockSize = blockSize;
+    }
+
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Get Last Block">
+    public static Block getLastBlock(ArrayList<Block> Chain) {
         return Chain.get(Chain.size()-1);
     }
     // </editor-fold>
@@ -57,7 +82,7 @@ public class Blockchain {
     }
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Alpha Block"> 
+    // <editor-fold defaultstate="collapsed" desc="Genesis Block"> 
     public static void genesisBlock(Blockchain Blockchain){
         ArrayList<Transaction> Transaction = new ArrayList<Transaction>();
         Date Time = new Date();
@@ -66,6 +91,47 @@ public class Blockchain {
                 
         Block genesis = new Block(0,Transaction);
         Blockchain.addBlock(genesis,Blockchain);
+    }
+    // </editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Mine pending transactions">
+    public static void minePendingTransactions(Blockchain Blockchain,String miner){
+        int lenPT = Blockchain.getPendingTransactions().size();
+        
+        if(lenPT <= 1){
+            System.out.println("not enough transactions");
+        }
+        else{
+            for(int i = 0;i<lenPT;i = i+ Blockchain.getBlockSize()){
+                
+                int end = i+ Blockchain.getBlockSize();
+                
+                if(lenPT <= i){
+                    end = lenPT;
+                }
+                
+                ArrayList<Transaction> TransactionSlice =  new ArrayList<Transaction>();
+                for(int j = 0;j<Blockchain.getPendingTransactions().size();i++){
+                    TransactionSlice.add(Blockchain.getPendingTransactions().get(j));
+                }
+                
+                Block newBlock = new Block(Blockchain.getBlockchain().size(),TransactionSlice);
+                
+                newBlock.setPrevHash(getLastBlock(Blockchain.getBlockchain()).getHash());
+                Block.mineBlock(newBlock, Blockchain.getDifficulty());
+                
+                Blockchain.getBlockchain().add(newBlock);
+                
+                System.out.println("Mining Success!!");
+                
+                Transaction payMiner = new Transaction("System", miner, Blockchain.getMinerReward());
+                ArrayList<Transaction> UpdatedTransactionList =  new ArrayList<Transaction>();
+                UpdatedTransactionList.add(payMiner);
+                Blockchain.setPendingTransactions(UpdatedTransactionList);    
+            }
+
+        }
+    
     }
     // </editor-fold>
 }
